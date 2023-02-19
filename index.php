@@ -90,6 +90,18 @@ $show_complete_tasks = rand(0, 1);
 
                 ];
 
+                function count_categories($category, $goals){
+                    $counter = 0;
+                    foreach($goals as $key => $value){
+                        if($category == $value["category"]){
+                            $counter = $counter + 1;
+                        }
+                    }
+
+                    return $counter;
+                };
+
+
                 ?>
 
                 <nav class="main-navigation">
@@ -99,7 +111,7 @@ $show_complete_tasks = rand(0, 1);
                         
                         <li class="main-navigation__list-item">
                             <a class="main-navigation__list-item-link" href="#"><?=$value;?></a>
-                            <span class="main-navigation__list-item-count">0</span>
+                            <span class="main-navigation__list-item-count"><?=count_categories($value, $goals);?></span>
                         </li>
                     <?php endforeach; ?>
                     </ul>
