@@ -52,7 +52,8 @@ href="pages/form-project.html" target="project_add">Добавить проек�
 <table class="tasks">
 <?php foreach ($goals as $key => $value): ?>
     <?php if(htmlspecialchars($value["is_done"]) == false): ?>
-    <tr class="tasks__item task"> 
+    <?php $res = get_remaining_time(htmlspecialchars($value["date"])) ?>
+    <tr class="tasks__item task<?php if ($res <= 24):?> task--important<?php endif; ?>"> 
     
     <td class="task__select">
         <label class="checkbox task__checkbox">
