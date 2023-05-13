@@ -13,24 +13,24 @@ CREATE TABLE users (
 
 );	
 
-CREATE TABLE projects (
+CREATE TABLE categories (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	project_title VARCHAR (255),
+	title VARCHAR (255),
 	author_id INT,
 	FOREIGN KEY (author_id) REFERENCES users(id)
 );
 
-CREATE TABLE tasks (
+CREATE TABLE goals (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	create_date DATETIME DEFAULT CURRENT_TIMESTAMP,
 	status INT,
-	task_name VARCHAR (255),
+	title VARCHAR (255),
 	file_path VARCHAR (255),
 	end_date DATE,
 	author_id INT,
-	project_id INT,
+	category_id INT,
 	FOREIGN KEY (author_id) REFERENCES users(id),
-	FOREIGN KEY (project_id) REFERENCES projects(id)
+	FOREIGN KEY (category_id) REFERENCES categories(id)
 
 );
 
