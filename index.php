@@ -1,65 +1,43 @@
 <?php
 
 require_once('helpers.php');
+require_once('init.php');
 
-// показывать или нет выполненные задачи
 $show_complete_tasks = rand(0, 1);
 
-                
-                
-$categories = ["Входящие", "Учеба", "Работа", "Домашние дела", "Авто"];
+if(!$con){
+    print("Connection error " . msqli_connect_error());
+} 
+else {
+               
+    $sql = "SELECT id, title FROM categories WHERE author_id = 1";
+    $res = mysqli_query($con, $sql);
 
-$goals = [
-    [
-        "title" => "Собеседование в IT компании",
-        "date" => "01.12.2019",
-        "category" => $categories[2],
-        "is_done" => false
-    ],
+    if(!$res){
+        $error = mysqli_error($con);
+        print("MYSQL error " . $error);
+    }
+    else {
+        $categories = mysqli_fetch_all($res, MYSQLI_ASSOC);
+    };
 
-    [
-        "title" => "Выполнить тестовое задание",
-        "date" => "25.12.2019",
-        "category" => $categories[2],
-        "is_done" => false
-    ],
+    $sql = "SELECT goals.status, goals.title, goals.end_date, goals.category_id FROM goals JOIN categories ON categories.id=goals.category_id WHERE goals.author_id = 1";
+    $res = mysqli_query($con, $sql);
 
-    [
-        "title" => "Сделать задание первого раздела",
-        "date" => "21.12.2019",
-        "category" => $categories[1],
-        "is_done" => true
-    ],
-
-    [
-        "title" => "Встреча с другом",
-        "date" => "22.12.2019",
-        "category" => $categories[0],
-        "is_done" => false
-    ],
-
-    [
-        "title" => "Купить корм для кота",
-        "date" => null,
-        "category" => $categories[3],
-        "is_done" => false
-    ],
-
-    [
-        "title" => "Заказать пиццу",
-        "date" => null,
-        "category" => $categories[3],
-        "is_done" => false
-    ]
-
-
-
-];
+    if(!$res){
+        $error = mysqli_error($con);
+        print("MYSQL error " . $error);
+    }
+    else {
+        $goals = mysqli_fetch_all($res, MYSQLI_ASSOC);
+    };
+    
+};
 
 function count_categories($category, $goals){
     $counter = 0;
     foreach($goals as $key => $value){
-        if($category == $value["category"]){
+        if($category == $value["category_id"]){
             $counter = $counter + 1;
         }
     }
@@ -67,6 +45,16 @@ function count_categories($category, $goals){
     return $counter;
 };
 
+function get_remaining_time($date){
+
+    $goal_date = strtotime($date);
+    $now_date = strtotime("now");
+    $sec_in_hour = 3600;
+
+    $result = floor(($goal_date - $now_date) / $sec_in_hour);
+
+    return $result;
+};
 
 $page_content = include_template('main.php', [
     'categories' => $categories,
@@ -83,17 +71,6 @@ $layout_content = include_template('layout.php', [
 ]);
 
 print($layout_content);
-
-function get_remaining_time($date){
-
-    $goal_date = strtotime($date);
-    $now_date = strtotime("now");
-    $sec_in_hour = 3600;
-
-    $result = floor(($goal_date - $now_date) / $sec_in_hour);
-
-    return $result;
-};
 
 ?>
 

@@ -5,12 +5,12 @@
 
 <nav class="main-navigation">
 <ul class="main-navigation__list">
-    <?php foreach ($categories as $value): ?>
+    <?php foreach ($categories as $key => $value): ?>
         
     
     <li class="main-navigation__list-item">
-        <a class="main-navigation__list-item-link" href="#"><?=htmlspecialchars($value);?></a>
-        <span class="main-navigation__list-item-count"><?=count_categories($value, $goals);?></span>
+        <a class="main-navigation__list-item-link" href="#"><?=htmlspecialchars($value['title']);?></a>
+        <span class="main-navigation__list-item-count"><?=count_categories($value['id'], $goals);?></span>
     </li>
 <?php endforeach; ?>
 </ul>
@@ -51,8 +51,8 @@ href="pages/form-project.html" target="project_add">Добавить проек�
 
 <table class="tasks">
 <?php foreach ($goals as $key => $value): ?>
-    <?php if(htmlspecialchars($value["is_done"]) == false): ?>
-    <?php $res = get_remaining_time(htmlspecialchars($value["date"])) ?>
+    <?php if(htmlspecialchars($value["status"]) == false): ?>
+    <?php $res = get_remaining_time(htmlspecialchars($value["end_date"])) ?>
     <tr class="tasks__item task<?php if ($res <= 24):?> task--important<?php endif; ?>"> 
     
     <td class="task__select">
@@ -64,15 +64,15 @@ href="pages/form-project.html" target="project_add">Добавить проек�
 
     <td class="task__file">  </td>                        
     
-    <td class="task__date"><?=htmlspecialchars($value["date"]);?></td>
+    <td class="task__date"><?=htmlspecialchars($value["end_date"]);?></td>
 
     <td class="task__controls"></td>
 
 </tr>
 
-    <?php elseif (htmlspecialchars($value["is_done"]) == true && $show_complete_tasks == 0): continue ?> 
+    <?php elseif (htmlspecialchars($value["status"]) == true && $show_complete_tasks == 0): continue ?> 
 
-    <?php elseif (htmlspecialchars($value["is_done"]) == true && $show_complete_tasks == 1): ?> 
+    <?php elseif (htmlspecialchars($value["status"]) == true && $show_complete_tasks == 1): ?> 
 
 <tr class="tasks__item task--completed"> 
     
@@ -85,7 +85,7 @@ href="pages/form-project.html" target="project_add">Добавить проек�
 
     <td class="task__file">  </td>                        
     
-    <td class="task__date"><?=htmlspecialchars($value["date"]);?></td>
+    <td class="task__date"><?=htmlspecialchars($value["end_date"]);?></td>
 
     <td class="task__controls"></td>
 
