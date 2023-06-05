@@ -6,11 +6,11 @@
 <nav class="main-navigation">
 <ul class="main-navigation__list">
     <?php foreach ($categories as $key => $value): ?>
-        
     
-    <li class="main-navigation__list-item">
-        <a class="main-navigation__list-item-link" href="#"><?=htmlspecialchars($value['title']);?></a>
-        <span class="main-navigation__list-item-count"><?=count_categories($value['id'], $goals);?></span>
+    <li class="main-navigation__list-item <?php if($value['id'] == ($_GET['id'] ?? null)): ?> main-navigation__list-item--active <?php endif;?>">
+        <a class="main-navigation__list-item-link" href="../index.php?id=<?= $value['id'] 
+        ;?>"><?=htmlspecialchars($value['title']);?></a>
+        <span class="main-navigation__list-item-count"><?=count_categories($value['id'], $all_goals);?></span>
     </li>
 <?php endforeach; ?>
 </ul>
