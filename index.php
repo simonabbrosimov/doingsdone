@@ -10,7 +10,7 @@ if(!$con){
     print("Connection error " . msqli_connect_error());
 }
 else {       
-    $sql = "SELECT id, title FROM categories WHERE author_id = 1";
+    $sql = "SELECT id, title FROM categories";
     $res = mysqli_query($con, $sql);
 
     if(!$res){
@@ -27,7 +27,7 @@ if(!$con){
     print("Connection error " . msqli_connect_error());
 }
 else {       
-    $sql = "SELECT goals.status, goals.title, goals.end_date, goals.category_id FROM goals JOIN categories ON categories.id=goals.category_id WHERE goals.author_id = 1";
+    $sql = "SELECT goals.status, goals.title, goals.file_path, goals.end_date, goals.category_id FROM goals JOIN categories ON categories.id=goals.category_id WHERE goals.author_id = 1";
     $res = mysqli_query($con, $sql);
 
     if(!$res){
@@ -44,11 +44,11 @@ else {
 $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
 
 if($id){
-    $sql = "SELECT goals.status, goals.title, goals.end_date, goals.category_id FROM goals JOIN categories ON categories.id=goals.category_id WHERE categories.id=" . $id;
+    $sql = "SELECT goals.status, goals.title, goals.file_path, goals.end_date, goals.category_id FROM goals JOIN categories ON categories.id=goals.category_id WHERE categories.id=" . $id;
     
 }
 else {
-    $sql = "SELECT goals.status, goals.title, goals.end_date, goals.category_id FROM goals JOIN categories ON categories.id=goals.category_id WHERE goals.author_id = 1";
+    $sql = "SELECT goals.status, goals.title, goals.file_path, goals.end_date, goals.category_id FROM goals JOIN categories ON categories.id=goals.category_id WHERE goals.author_id = 1";
 }
 
 $res = mysqli_query($con, $sql);

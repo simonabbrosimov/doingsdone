@@ -62,7 +62,7 @@ href="pages/form-project.html" target="project_add">Добавить проек�
         </label>
     </td>
 
-    <td class="task__file">  </td>                        
+    <td class="task__file"> </td>                        
     
     <td class="task__date"><?=htmlspecialchars($value["end_date"]);?></td>
 

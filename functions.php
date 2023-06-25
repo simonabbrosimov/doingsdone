@@ -10,9 +10,6 @@ function count_categories($category, $all_goals){
     return $counter;
 };
 
-
-
-
 function get_remaining_time($date){
 
     $goal_date = strtotime($date);
@@ -24,3 +21,41 @@ function get_remaining_time($date){
     return $result;
 };
 
+function validate_category($id, $allowed_list) {
+    if (!in_array ($id, $allowed_list)) {
+        return "Указана несуществующая категория";
+    }
+
+    return null;
+};
+
+function validate_length($value, $min, $max) {
+    if ($value) {
+        $len = strlen($value);
+        if ($len < $min or $len > $max) {
+            return "Значение должно быть от $min до $max символов";
+        }
+    }
+
+    return null;
+};
+
+function validate_date($value){
+  if(empty($value)) {
+    return null;  
+  } 
+  elseif(date('Y-m-d', strtotime($value)) === $value){
+    $now_date = date('Y-m-d');
+    $now_date = strtotime($now_date);
+    $end_date = strtotime($value);
+    if($now_date <= $end_date){
+        return null;
+    }
+    else{
+        return "Введенная дата должна быть не меньше текущей";
+    }
+    }
+  else{
+    return "Введенная дата должна быть в формате ГГГГ-ММ-ДД";
+  }
+};
