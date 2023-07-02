@@ -3,7 +3,7 @@
           <div class="form__row <?=$classname ;?>">
             <label class="form__label" for="name">Название <sup>*</sup></label>
 
-            <input class="form__input" type="text" name="name" id="name" value="<?=$new_goal['name'];?>" placeholder="Введите название">
+            <input class="form__input" type="text" name="name" id="name" value="<?=htmlspecialchars($new_goal['name'], ENT_QUOTES);?>" placeholder="Введите название">
             <p class="form__message"><?=$errors['name'];?></p>
           </div>
           <?php $classname = isset($errors['project']) ? "form__input--error" : "" ;?> 
@@ -13,7 +13,7 @@
             <select class="form__input form__input--select" name="project" id="project">
               <option >Выберите проект</option>
               <?php foreach ($categories as $cat):?>
-              <option value="<?=$cat['id'];?>"><?=$cat['title'];?></option>
+              <option value="<?=htmlspecialchars($cat['id'], ENT_QUOTES);?>"><?=htmlspecialchars($cat['title'], ENT_QUOTES);?></option>
             <?php endforeach;?>
             </select>
              <p class="form__message"><?=$errors['project'];?></p>
@@ -22,7 +22,7 @@
           <div class="form__row <?=$classname ;?>">
             <label class="form__label" for="date">Дата выполнения</label>
 
-            <input class="form__input form__input--date" type="text" name="date" id="date" value="<?=$new_goal['date'];?>" placeholder="Введите дату в формате ГГГГ-ММ-ДД">
+            <input class="form__input form__input--date" type="text" name="date" id="date" value="<?=htmlspecialchars($new_goal['date'], ENT_QUOTES);?>" placeholder="Введите дату в формате ГГГГ-ММ-ДД">
              <p class="form__message"><?=$errors['date'];?></p>
           </div>
 

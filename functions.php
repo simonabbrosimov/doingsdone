@@ -41,7 +41,7 @@ function validate_length($value, $min, $max) {
 };
 
 function validate_date($value){
-  if(empty($value)) {
+  if($value == null) {
     return null;  
   } 
   elseif(date('Y-m-d', strtotime($value)) === $value){
@@ -52,10 +52,29 @@ function validate_date($value){
         return null;
     }
     else{
-        return "Введенная дата должна быть не меньше текущей";
+        return "Введенная дата должна быть больше текущей";
     }
     }
   else{
     return "Введенная дата должна быть в формате ГГГГ-ММ-ДД";
   }
 };
+
+
+function get_result($con, $sql){
+    $res = mysqli_query($con, $sql);
+    if($res){
+       return mysqli_fetch_all($res, MYSQLI_ASSOC); 
+    }
+};
+
+function get_column($con, $sql, $column){
+    $res = mysqli_query($con, $sql);
+    if($res){
+       $cat = mysqli_fetch_all($res, MYSQLI_ASSOC);
+       return array_column($cat, $column); 
+    }
+};
+
+
+    

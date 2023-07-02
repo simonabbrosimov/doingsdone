@@ -40,8 +40,8 @@
           <ul class="main-navigation__list">
           <?php foreach ($categories as $key => $value): ?>  
             <li class="main-navigation__list-item">
-              <a class="main-navigation__list-item-link" href="#"><?=$value['title'];?></a>
-              <span class="main-navigation__list-item-count"><?=count_categories($value['id'], $all_goals);?></span>
+              <a class="main-navigation__list-item-link" href="#"><?=htmlspecialchars($value['title'], ENT_QUOTES);?></a>
+              <span class="main-navigation__list-item-count"><?=count_categories(htmlspecialchars($value['id'], ENT_QUOTES), $all_goals);?></span>
             </li>
           <?php endforeach; ?>    
             

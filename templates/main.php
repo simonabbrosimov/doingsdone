@@ -7,10 +7,10 @@
 <ul class="main-navigation__list">
     <?php foreach ($categories as $key => $value): ?>
     
-    <li class="main-navigation__list-item <?php if($value['id'] == ($_GET['id'] ?? null)): ?> main-navigation__list-item--active <?php endif;?>">
+    <li class="main-navigation__list-item <?php if(htmlspecialchars($value['id'], ENT_QUOTES) == ($_GET['id'] ?? null)): ?> main-navigation__list-item--active <?php endif;?>">
         <a class="main-navigation__list-item-link" href="../index.php?id=<?= $value['id'] 
-        ;?>"><?=htmlspecialchars($value['title']);?></a>
-        <span class="main-navigation__list-item-count"><?=count_categories($value['id'], $all_goals);?></span>
+        ;?>"><?=htmlspecialchars($value['title'], ENT_QUOTES);?></a>
+        <span class="main-navigation__list-item-count"><?=count_categories(htmlspecialchars($value['id'], ENT_QUOTES), $all_goals);?></span>
     </li>
 <?php endforeach; ?>
 </ul>
@@ -51,41 +51,41 @@ href="pages/form-project.html" target="project_add">Добавить проек�
 
 <table class="tasks">
 <?php foreach ($goals as $key => $value): ?>
-    <?php if(htmlspecialchars($value["status"]) == false): ?>
-    <?php $res = get_remaining_time(htmlspecialchars($value["end_date"])) ?>
+    <?php if(htmlspecialchars($value["status"], ENT_QUOTES) == false): ?>
+    <?php $res = get_remaining_time(htmlspecialchars($value["end_date"], ENT_QUOTES)) ?>
     <tr class="tasks__item task<?php if ($res <= 24):?> task--important<?php endif; ?>"> 
     
     <td class="task__select">
         <label class="checkbox task__checkbox">
             <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1">
-            <span class="checkbox__text"><?=htmlspecialchars($value["title"]);?></span>
+            <span class="checkbox__text"><?=htmlspecialchars($value["title"], ENT_QUOTES);?></span>
         </label>
     </td>
 
     <td class="task__file"> </td>                        
     
-    <td class="task__date"><?=htmlspecialchars($value["end_date"]);?></td>
+    <td class="task__date"><?=htmlspecialchars($value["end_date"], ENT_QUOTES);?></td>
 
     <td class="task__controls"></td>
 
 </tr>
 
-    <?php elseif (htmlspecialchars($value["status"]) == true && $show_complete_tasks == 0): continue ?> 
+    <?php elseif (htmlspecialchars($value["status"], ENT_QUOTES) == true && $show_complete_tasks == 0): continue ?> 
 
-    <?php elseif (htmlspecialchars($value["status"]) == true && $show_complete_tasks == 1): ?> 
+    <?php elseif (htmlspecialchars($value["status"], ENT_QUOTES) == true && $show_complete_tasks == 1): ?> 
 
 <tr class="tasks__item task--completed"> 
     
     <td class="task__select">
         <label class="checkbox task__checkbox">
             <input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1">
-            <span class="checkbox__text"><?=htmlspecialchars($value["title"]);?></span>
+            <span class="checkbox__text"><?=htmlspecialchars($value["title"], ENT_QUOTES);?></span>
         </label>
     </td>
 
     <td class="task__file">  </td>                        
     
-    <td class="task__date"><?=htmlspecialchars($value["end_date"]);?></td>
+    <td class="task__date"><?=htmlspecialchars($value["end_date"], ENT_QUOTES);?></td>
 
     <td class="task__controls"></td>
 
