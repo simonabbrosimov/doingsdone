@@ -4,18 +4,16 @@ require_once('helpers.php');
 require_once('init.php');
 require_once('functions.php');
 
-if($con){
-    $sql = "SELECT id, title FROM categories";
-    $categories = get_result($con, $sql);
-    $column = 'id';
-    $categories_id = get_column($con, $sql, $column);
-    $sql = "SELECT goals.status, goals.title, goals.end_date, goals.category_id FROM goals JOIN categories ON categories.id=goals.category_id WHERE goals.author_id = 1";
-    $all_goals = get_result($con, $sql);
+$sql = "SELECT id, title FROM categories";
+$categories = db_get_rows($con, $sql);
+$column = 'id';
+$categories_id = db_get_column($con, $sql, $column);
+$sql = "SELECT goals.status, goals.title, goals.end_date, goals.category_id FROM goals JOIN categories ON categories.id=goals.category_id WHERE goals.author_id = 1";
+$all_goals = db_get_rows($con, $sql);
   
-}
-
 $page_content = include_template('add-project_main.php', [
-    'categories' => $categories    
+	'categories' => $categories,
+	'all_goals' => $all_goals    
 ]);
 
 if($_SERVER['REQUEST_METHOD']== 'POST'){
@@ -46,7 +44,7 @@ if($_SERVER['REQUEST_METHOD']== 'POST'){
 
 		if(in_array($key, $require_fields) && empty($value)){
 			$errors[$key] = "Поле надо заполнить";
-	    }
+		}
 	}
 
 	$errors = array_filter($errors);
@@ -56,45 +54,44 @@ if($_SERVER['REQUEST_METHOD']== 'POST'){
 	$tmp_name = $_FILES['file']['tmp_name'];
 	$file_path = __DIR__ . '/uploads/';
 	move_uploaded_file($tmp_name, $file_path . $file_name);
-    $new_goal['file'] = __DIR__ . '/uploads/' . $file_name;
+	$new_goal['file'] = __DIR__ . '/uploads/' . $file_name;
 	}
 	
 	if(count($errors)){
 		$page_content = include_template('add-project_main.php', [
 			'categories' => $categories,
 			'categories_id' => $categories_id,
-    		'errors' => $errors,
+			'errors' => $errors,
 			'new_goal' => $new_goal
 
-	    ]);
+		]);
 	} 
 	else {
 		
 		$sql = "INSERT INTO goals (title, category_id, end_date, file_path, author_id, status) VALUES (?, ?, ?, ?, 1, 0);";
-	    $stmt = db_get_prepare_stmt($con, $sql, $new_goal);
-	    $res = mysqli_stmt_execute($stmt);
+		$stmt = db_get_prepare_stmt($con, $sql, $new_goal);
+		$res = mysqli_stmt_execute($stmt);
    
-		if($res){
-			$goal_id = mysqli_insert_id($con);
-			header("Location:index.php");
+		$goal_id = mysqli_insert_id($con);
+		header("Location:index.php");
 
-		$page_content = include_template('add-lot_main.php', [
-	     'categories' => $categories,
-	     'new_goal' => $new_goal
-    	 
+		$page_content = include_template('add-project_main.php', [
+		 'categories' => $categories,
+		 'new_goal' => $new_goal
+		 
 	]);		
 
-        }		
+				
 
 	}  
 
 } 
 
-$layout_content = include_template('add-project_layout.php', [
-    'content' => $page_content,
-    'categories' => $categories,
-    'all_goals' => $all_goals,
-    'title' => 'Дела в порядке'
+$layout_content = include_template('layout.php', [
+	'content' => $page_content,
+	'categories' => $categories,
+	'all_goals' => $all_goals,
+	'title' => 'Дела в порядке'
 
 ]);
 

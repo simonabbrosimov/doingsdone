@@ -1,80 +1,91 @@
 <?php
 function count_categories($category, $all_goals){
-    $counter = 0;
-    foreach($all_goals as $key => $value){
-        if($category == $value["category_id"]){
-            $counter = $counter + 1;
-        }
-    }
+	$counter = 0;
+	foreach($all_goals as $key => $value){
+		if($category == $value["category_id"]){
+			$counter = $counter + 1;
+		}
+	}
 
-    return $counter;
+	return $counter;
 };
 
 function get_remaining_time($date){
 
-    $goal_date = strtotime($date);
-    $now_date = strtotime("now");
-    $sec_in_hour = 3600;
+	$goal_date = strtotime($date);
+	$now_date = strtotime("now");
+	$sec_in_hour = 3600;
 
-    $result = floor(($goal_date - $now_date) / $sec_in_hour);
+	$result = floor(($goal_date - $now_date) / $sec_in_hour);
 
-    return $result;
+	return $result;
 };
 
 function validate_category($id, $allowed_list) {
-    if (!in_array ($id, $allowed_list)) {
-        return "Указана несуществующая категория";
-    }
+	if (!in_array ($id, $allowed_list)) {
+		return "Указана несуществующая категория";
+	}
 
-    return null;
+	return null;
 };
 
 function validate_length($value, $min, $max) {
-    if ($value) {
-        $len = strlen($value);
-        if ($len < $min or $len > $max) {
-            return "Значение должно быть от $min до $max символов";
-        }
-    }
+	if ($value) {
+		$len = strlen($value);
+		if ($len < $min or $len > $max) {
+			return "Значение должно быть от $min до $max символов";
+		}
+	}
 
-    return null;
+	return null;
 };
 
 function validate_date($value){
-  if($value == null) {
-    return null;  
-  } 
-  elseif(date('Y-m-d', strtotime($value)) === $value){
-    $now_date = date('Y-m-d');
-    $now_date = strtotime($now_date);
-    $end_date = strtotime($value);
-    if($now_date <= $end_date){
-        return null;
-    }
-    else{
-        return "Введенная дата должна быть больше текущей";
-    }
-    }
-  else{
-    return "Введенная дата должна быть в формате ГГГГ-ММ-ДД";
-  }
+	if($value == null) {
+	return null;  
+	} 
+	elseif(date('Y-m-d', strtotime($value)) === $value){
+	$now_date = date('Y-m-d');
+	$now_date = strtotime($now_date);
+	$end_date = strtotime($value);
+	if($now_date <= $end_date){
+		return null;
+	}
+	else{
+		return "Введенная дата должна быть больше текущей";
+	}
+	}
+	else{
+	return "Введенная дата должна быть в формате ГГГГ-ММ-ДД";
+	}
 };
 
 
-function get_result($con, $sql){
-    $res = mysqli_query($con, $sql);
-    if($res){
-       return mysqli_fetch_all($res, MYSQLI_ASSOC); 
-    }
+function db_get_rows($con, $sql){
+	$res = mysqli_query($con, $sql);
+	return mysqli_fetch_all($res, MYSQLI_ASSOC); 
+	};
+
+function db_get_column($con, $sql, $column){
+	$res = mysqli_query($con, $sql);
+	$cat = mysqli_fetch_all($res, MYSQLI_ASSOC);
+	return array_column($cat, $column); 
+	
 };
 
-function get_column($con, $sql, $column){
-    $res = mysqli_query($con, $sql);
-    if($res){
-       $cat = mysqli_fetch_all($res, MYSQLI_ASSOC);
-       return array_column($cat, $column); 
-    }
-};
+function validate_email($value, $allowed_list) {
+	$email = filter_var($value, FILTER_VALIDATE_EMAIL);
+	if($email){
+		if (in_array ($value, $allowed_list)) {
+			return "Пользователь с данным e-mail уже зарегистрирован";
+	}	
+		else {
+			return null;
+		}
 
-
-    
+	}
+	else {
+		return "Введите правильный e-mail";
+	}	
+	
+};                                                          
