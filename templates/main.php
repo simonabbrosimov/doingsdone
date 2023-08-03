@@ -1,15 +1,3 @@
-<div class="main-header__side">
-				<a class="main-header__side-item button button--plus open-modal" href="pages/form-task.html">Добавить задачу</a>
-
-				<div class="main-header__side-item user-menu">
-					<div class="user-menu__data">
-						<p>Семён</p>
-
-						<a href="#">Выйти</a>
-					</div>
-				</div>
-			</div>
-		</header>
 
 <div class="content">
 <section class="content__side">
@@ -30,7 +18,7 @@
 </nav>
 
 <a class="button button--transparent button--plus content__side-button"
-href="pages/form-project.html" target="project_add">Добавить проект</a>
+href="../add.php" target="project_add">Добавить проект</a>
 </section>
 
 <main class="content__main">

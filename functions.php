@@ -88,4 +88,35 @@ function validate_email($value, $allowed_list) {
 		return "Введите правильный e-mail";
 	}	
 	
-};                                                          
+}; 
+
+function check_email($value) {
+	$email = filter_var($value, FILTER_VALIDATE_EMAIL);
+	if(!$email){
+		return "Введите правильный e-mail";
+	}	
+	else {
+		return null;
+	}
+};
+
+function get_data($con, $email) {
+	$sql = "SELECT id, user_email, user_name, password FROM users WHERE user_email=?";
+	$stmt = mysqli_prepare($con, $sql);
+	mysqli_stmt_bind_param($stmt, 's', $email);
+	mysqli_stmt_execute($stmt);
+	$res = mysqli_stmt_get_result($stmt);
+	$user_data = $res ? mysqli_fetch_array($res, MYSQLI_ASSOC) : null;
+	
+	return $user_data;
+};                                                 
+
+function db_get_data_on_id($con, $sql, $data){
+	$stmt = mysqli_prepare($con, $sql);
+    mysqli_stmt_bind_param($stmt, 'i', $data);
+    mysqli_stmt_execute($stmt);
+    $res = mysqli_stmt_get_result($stmt);
+    $result = $res ? mysqli_fetch_all($res, MYSQLI_ASSOC) : null;
+
+    return $result;
+};

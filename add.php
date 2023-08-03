@@ -3,13 +3,22 @@
 require_once('helpers.php');
 require_once('init.php');
 require_once('functions.php');
+require_once('data.php');
+
+if(isset($_SESSION['name'])){
 
 $sql = "SELECT id, title FROM categories";
 $categories = db_get_rows($con, $sql);
 $column = 'id';
 $categories_id = db_get_column($con, $sql, $column);
-$sql = "SELECT goals.status, goals.title, goals.end_date, goals.category_id FROM goals JOIN categories ON categories.id=goals.category_id WHERE goals.author_id = 1";
-$all_goals = db_get_rows($con, $sql);
+
+$sql = "SELECT goals.status, goals.title, goals.end_date, goals.category_id FROM goals JOIN categories ON categories.id=goals.category_id WHERE goals.author_id = ?";
+
+$stmt = mysqli_prepare($con, $sql);
+mysqli_stmt_bind_param($stmt, 'i', $author_id);
+mysqli_stmt_execute($stmt);
+$res = mysqli_stmt_get_result($stmt);
+$all_goals = $res ? mysqli_fetch_all($res, MYSQLI_ASSOC) : null;
   
 $page_content = include_template('add-project_main.php', [
 	'categories' => $categories,
@@ -67,8 +76,8 @@ if($_SERVER['REQUEST_METHOD']== 'POST'){
 		]);
 	} 
 	else {
-		
-		$sql = "INSERT INTO goals (title, category_id, end_date, file_path, author_id, status) VALUES (?, ?, ?, ?, 1, 0);";
+		$new_goal['author_id'] = $author_id;
+		$sql = "INSERT INTO goals (title, category_id, end_date, file_path, author_id, status) VALUES (?, ?, ?, ?, ?, 0);";
 		$stmt = db_get_prepare_stmt($con, $sql, $new_goal);
 		$res = mysqli_stmt_execute($stmt);
    
@@ -80,9 +89,7 @@ if($_SERVER['REQUEST_METHOD']== 'POST'){
 		 'new_goal' => $new_goal
 		 
 	]);		
-
-				
-
+		
 	}  
 
 } 
@@ -96,3 +103,11 @@ $layout_content = include_template('layout.php', [
 ]);
 
 print($layout_content);
+
+}
+else {
+	http_response_code(403);
+	print("Error: ");
+	print(http_response_code());
+	die();
+}
