@@ -88,7 +88,7 @@ function validate_email($value, $allowed_list) {
 		return "Введите правильный e-mail";
 	}	
 	
-}; 
+};
 
 function check_email($value) {
 	$email = filter_var($value, FILTER_VALIDATE_EMAIL);
@@ -100,7 +100,7 @@ function check_email($value) {
 	}
 };
 
-function get_data($con, $email) {
+function db_get_user($con, $email) {
 	$sql = "SELECT id, user_email, user_name, password FROM users WHERE user_email=?";
 	$stmt = mysqli_prepare($con, $sql);
 	mysqli_stmt_bind_param($stmt, 's', $email);
@@ -109,14 +109,16 @@ function get_data($con, $email) {
 	$user_data = $res ? mysqli_fetch_array($res, MYSQLI_ASSOC) : null;
 	
 	return $user_data;
-};                                                 
-
-function db_get_data_on_id($con, $sql, $data){
-	$stmt = mysqli_prepare($con, $sql);
-    mysqli_stmt_bind_param($stmt, 'i', $data);
-    mysqli_stmt_execute($stmt);
-    $res = mysqli_stmt_get_result($stmt);
-    $result = $res ? mysqli_fetch_all($res, MYSQLI_ASSOC) : null;
-
-    return $result;
 };
+
+function db_get_data($con, $sql, $data) {
+	$stmt = db_get_prepare_stmt($con, $sql, $data);
+	mysqli_stmt_execute($stmt);
+	$res = mysqli_stmt_get_result($stmt);
+	$user_data = $res ? mysqli_fetch_all($res, MYSQLI_ASSOC) : null;
+	
+	return $user_data;
+};
+
+
+

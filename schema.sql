@@ -34,3 +34,4 @@ CREATE TABLE goals (
 
 );
 
+ALTER TABLE goals ADD FULLTEXT(title);

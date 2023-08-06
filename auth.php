@@ -43,7 +43,7 @@ if($_SERVER['REQUEST_METHOD']== 'POST'){
 			]);
 		}
 	else {
-		$user = get_data($con,$user_information['email']);
+		$user = db_get_user($con,$user_information['email']);
 		if ($user) {
 				if (password_verify($user_information['password'], $user['password'])) {
 					session_start();

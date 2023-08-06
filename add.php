@@ -13,13 +13,8 @@ $column = 'id';
 $categories_id = db_get_column($con, $sql, $column);
 
 $sql = "SELECT goals.status, goals.title, goals.end_date, goals.category_id FROM goals JOIN categories ON categories.id=goals.category_id WHERE goals.author_id = ?";
+$all_goals = db_get_data($con, $sql, [$author_id]);
 
-$stmt = mysqli_prepare($con, $sql);
-mysqli_stmt_bind_param($stmt, 'i', $author_id);
-mysqli_stmt_execute($stmt);
-$res = mysqli_stmt_get_result($stmt);
-$all_goals = $res ? mysqli_fetch_all($res, MYSQLI_ASSOC) : null;
-  
 $page_content = include_template('add-project_main.php', [
 	'categories' => $categories,
 	'all_goals' => $all_goals    
