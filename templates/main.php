@@ -18,7 +18,7 @@
 </nav>
 
 <a class="button button--transparent button--plus content__side-button"
-href="../add.php" target="project_add">Добавить проект</a>
+href="../add-project.php" target="project_add">Добавить проект</a>
 </section>
 
 <main class="content__main">
@@ -32,7 +32,7 @@ href="../add.php" target="project_add">Добавить проект</a>
 
 <div class="tasks-controls">
 <nav class="tasks-switch">
-	<a href="/" class="tasks-switch__item tasks-switch__item--active">Все задачи</a>
+	<a href="../index.php" class="tasks-switch__item tasks-switch__item--active">Все задачи</a>
 	<a href="/" class="tasks-switch__item">Повестка дня</a>
 	<a href="/" class="tasks-switch__item">Завтра</a>
 	<a href="/" class="tasks-switch__item">Просроченные</a>
@@ -41,7 +41,7 @@ href="../add.php" target="project_add">Добавить проект</a>
 <label class="checkbox">
 	<!--добавить сюда атрибут "checked", если переменная $show_complete_tasks равна единице-->
 	<input class="checkbox__input visually-hidden show_completed" type="checkbox"
-	<?php if($show_complete_tasks == 1): ?>
+	<?php if($show_complete_tasks == 1 || $show_complete_tasks == ""): ?>
 		checked
 	<?php endif; ?>    
 
@@ -58,7 +58,7 @@ href="../add.php" target="project_add">Добавить проект</a>
 	
 	<td class="task__select">
 		<label class="checkbox task__checkbox">
-			<input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1">
+			<input class="checkbox__input visually-hidden task__checkbox" type="checkbox" name="name" value="<?=htmlspecialchars($value["id"], ENT_QUOTES);?>">
 			<span class="checkbox__text"><?=htmlspecialchars($value["title"], ENT_QUOTES);?></span>
 		</label>
 	</td>
@@ -71,7 +71,7 @@ href="../add.php" target="project_add">Добавить проект</a>
 
 </tr>
 
-	<?php elseif (htmlspecialchars($value["status"], ENT_QUOTES) == true && $show_complete_tasks == 0): continue ?> 
+	
 
 	<?php elseif (htmlspecialchars($value["status"], ENT_QUOTES) == true && $show_complete_tasks == 1): ?> 
 
@@ -79,7 +79,8 @@ href="../add.php" target="project_add">Добавить проект</a>
 	
 	<td class="task__select">
 		<label class="checkbox task__checkbox">
-			<input class="checkbox__input visually-hidden task__checkbox" type="checkbox" value="1">
+			<input class="checkbox__input visually-hidden task__checkbox" type="checkbox" checked name =
+			"name" value="<?=htmlspecialchars($value["id"], ENT_QUOTES);?>">
 			<span class="checkbox__text"><?=htmlspecialchars($value["title"], ENT_QUOTES);?></span>
 		</label>
 	</td>

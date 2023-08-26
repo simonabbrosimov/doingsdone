@@ -12,10 +12,10 @@ $categories = db_get_rows($con, $sql);
 $column = 'id';
 $categories_id = db_get_column($con, $sql, $column);
 
-$sql = "SELECT goals.status, goals.title, goals.end_date, goals.category_id FROM goals JOIN categories ON categories.id=goals.category_id WHERE goals.author_id = ?";
+$sql = "SELECT goals.id, goals.status, goals.title, goals.end_date, goals.category_id FROM goals JOIN categories ON categories.id=goals.category_id WHERE goals.author_id = ?";
 $all_goals = db_get_data($con, $sql, [$author_id]);
 
-$page_content = include_template('add-project_main.php', [
+$page_content = include_template('add-task_main.php', [
 	'categories' => $categories,
 	'all_goals' => $all_goals    
 ]);
@@ -62,7 +62,7 @@ if($_SERVER['REQUEST_METHOD']== 'POST'){
 	}
 	
 	if(count($errors)){
-		$page_content = include_template('add-project_main.php', [
+		$page_content = include_template('add-task_main.php', [
 			'categories' => $categories,
 			'categories_id' => $categories_id,
 			'errors' => $errors,
@@ -79,7 +79,7 @@ if($_SERVER['REQUEST_METHOD']== 'POST'){
 		$goal_id = mysqli_insert_id($con);
 		header("Location:index.php");
 
-		$page_content = include_template('add-project_main.php', [
+		$page_content = include_template('add-task_main.php', [
 		 'categories' => $categories,
 		 'new_goal' => $new_goal
 		 

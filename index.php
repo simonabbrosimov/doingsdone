@@ -10,7 +10,7 @@ if(isset($_SESSION['name'])){
 $sql = "SELECT id, title FROM categories";
 $categories = db_get_rows($con, $sql);
 
-$sql = "SELECT goals.status, goals.title, goals.file_path, goals.end_date, goals.category_id FROM goals JOIN categories ON categories.id=goals.category_id WHERE goals.author_id =?";
+$sql = "SELECT goals.id, goals.status, goals.title, goals.file_path, goals.end_date, goals.category_id FROM goals JOIN categories ON categories.id=goals.category_id WHERE goals.author_id =?";
 $all_goals = db_get_data($con, $sql, [$author_id]);
 
 $page_content = include_template('main.php', [
@@ -23,7 +23,7 @@ $page_content = include_template('main.php', [
 $search = $_GET['search'] ?? '';
 
 if($search){
-	$sql = "SELECT goals.status, goals.title, goals.file_path, goals.end_date, goals.category_id FROM goals JOIN categories ON categories.id=goals.category_id WHERE goals.author_id =? AND MATCH (goals.title) AGAINST (?)";
+	$sql = "SELECT goals.id goals.status, goals.title, goals.file_path, goals.end_date, goals.category_id FROM goals JOIN categories ON categories.id=goals.category_id WHERE goals.author_id =? AND MATCH (goals.title) AGAINST (?)";
 	$goals = db_get_data($con, $sql, [$author_id, $search]);
 	
 	$page_content = include_template('main.php', [
@@ -37,17 +37,16 @@ if($search){
 }
 
 $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+$task_id = filter_input(INPUT_GET, 'task_id', FILTER_SANITIZE_NUMBER_INT);
 
 if($id){
-$sql = "SELECT goals.status, goals.title, goals.file_path, goals.end_date, goals.category_id FROM goals JOIN categories ON categories.id=goals.category_id WHERE goals.author_id = ? AND categories.id=?";
+$sql = "SELECT goals.id, goals.status, goals.title, goals.file_path, goals.end_date, goals.category_id FROM goals JOIN categories ON categories.id=goals.category_id WHERE goals.author_id = ? AND categories.id=?";
 $goals = db_get_data($con, $sql, [$author_id, $id]);
 	
 
 if(!$goals){
-	http_response_code(404);
-	print("Error: ");
-	print(http_response_code());
-	die();
+	header("Location: index.php");
+	
 }
 
 $page_content = include_template('main.php', [
@@ -58,6 +57,24 @@ $page_content = include_template('main.php', [
 
 ]);
 }
+
+ if($task_id){
+	$sql = "SELECT id, status, title, end_date FROM goals WHERE id=?";
+	$task = db_get_data($con, $sql, [$task_id]);
+
+	if($task['status'] == 0){
+		$new_status = 1;
+	}
+	else{
+		$new_status = 0;
+	}
+	$sql = "UPDATE goals SET status=? WHERE id=?";
+	$stmt = db_get_prepare_stmt($con, $sql, [$new_status, $task_id]);
+	$res = mysqli_stmt_execute($stmt);
+	header("Location:index.php");
+   
+
+ }   
 
 $layout_content = include_template('layout.php', [
 	'content' => $page_content,
